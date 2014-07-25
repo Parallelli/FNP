@@ -21,6 +21,7 @@ namespace PatternMining
             graph.printGraph();
             BuildingBlock bb = new BuildingBlock();
             List<Graph> bbGraphs = bb.getBuildingBlockGraph(graph);
+            //jiajiazhushi
         }
     }
 }
