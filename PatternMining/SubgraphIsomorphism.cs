@@ -101,8 +101,8 @@ namespace PatternMining
             Isomorphic = false;
             if (g1.n < g2.n) return false;
 
-            int pivot_g = g1.getPivot();
-            int pivot_p = g2.getPivot();
+            int pivot_g = g1.pivot;
+            int pivot_p = g2.pivot;
 
             bool[] vis = new bool[g1.n];
             for (int i = 0; i < vis.Length; ++i)

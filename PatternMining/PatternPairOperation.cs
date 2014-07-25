@@ -66,7 +66,7 @@ namespace PatternMining
             bool flag = false;
             for (int u = 0; u < sp.n; ++u)
             {
-                if (sp.getDeg(u) == 0 && u != sp.getPivot())
+                if (sp.getDeg(u) == 0 && u != sp.pivot)
                 {
                     flag = true;
                     break;
@@ -95,7 +95,7 @@ namespace PatternMining
                         int type = subPatternType(subPattern);
                         if (type == 0)
                         {
-                            //todo
+                            //todo  
                         }
                         else if (type == 1)
                         {
