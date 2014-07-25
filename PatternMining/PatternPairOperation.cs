@@ -10,13 +10,15 @@ namespace PatternMining
         public Graph Pattern1;
         public Graph Pattern2;
         public List<Graph> new_patterns;
+        public List<Graph> old_patterns;
         public int R;
 
-        public PatternPairOperation(Graph Pattern1, Graph Pattern2, int R)
+        public PatternPairOperation(Graph Pattern1, Graph Pattern2, List<Graph> old_patterns, int R)
         {
             this.Pattern1 = Pattern1;
             this.Pattern2 = Pattern2;
             new_patterns = new List<Graph>();
+            this.old_patterns = old_patterns;
             this.R = R;
         }
 
@@ -78,7 +80,7 @@ namespace PatternMining
                 return 0;   //sp has one isolated node which is not the pivot
         }
 
-        public List<Graph> generateNewPatterns(List<Graph> FreqPatterns)
+        public List<Graph> generateNewPatterns()
         {
             new_patterns.Clear();
             if (!qualified())
