@@ -7,3 +7,5 @@ C:\scratch\github\Frequent-Neighborhood-Pattern-Mining\PatternMining\obj\x86\Deb
 C:\scratch\github\Frequent-Neighborhood-Pattern-Mining\PatternMining\obj\x86\Debug\PatternMining.pdb
 C:\scratch\github\Frequent-Neighborhood-Pattern-Mining\PatternMining\bin\Debug\PatternMining.exe
 C:\scratch\github\Frequent-Neighborhood-Pattern-Mining\PatternMining\bin\Debug\PatternMining.pdb
+D:\Algorithm Code\FNP\PatternMining\obj\x86\Debug\PatternMining.exe
+D:\Algorithm Code\FNP\PatternMining\obj\x86\Debug\PatternMining.pdb
