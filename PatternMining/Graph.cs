@@ -93,12 +93,13 @@ namespace PatternMining
             
             n = idCnt;
             m = edgeCnt;
+            Console.WriteLine("Finish building graph!");
         }
         public void printGraph()
         {
             int cnt = adj.Count;
             Console.WriteLine("count: " + cnt + " nodes: " + n + " edges: " + m);
-            string test = Console.ReadLine();
+            //string test = Console.ReadLine();
             for(int i = 0; i < adj.Count; i++)
             {
                 //Console.ReadLine();
@@ -160,7 +161,7 @@ namespace PatternMining
             {
                 List<int> tmp = new List<int>();
                 tmp.Add(i);
-                labels[i] = labelSeq[i];
+                labels.Add(labelSeq[i]);
                 if (i - 1 >= 0) tmp.Add(i - 1);
                 if (i + 1 < labelSeq.Count) tmp.Add(i + 1);
                 adj.Add(tmp);

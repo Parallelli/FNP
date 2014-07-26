@@ -14,13 +14,17 @@ namespace PatternMining
              */
             GlobalVar.minSup = 5;
             GlobalVar.radius = 3;
-            GlobalVar.inputFilePath = @"C:\scratch\github\data\dblp.txt";
+            GlobalVar.inputFilePath = @"C:\scratch\github\data\dblp_small.txt";
     
             Graph graph = new Graph();
             graph.buildGraph(GlobalVar.inputFilePath);
             graph.printGraph();
             BuildingBlock bb = new BuildingBlock();
             List<Graph> bbGraphs = bb.getBuildingBlockGraph(graph);
+            foreach (Graph g in bbGraphs)
+            {
+                g.printGraph();
+            }
         }
     }
 }
