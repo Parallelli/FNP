@@ -5,6 +5,7 @@ using System.Text;
 
 namespace PatternMining
 {
+    //test
     class SubgraphIsomorphism
     {
         public Graph g1;
@@ -16,7 +17,7 @@ namespace PatternMining
         public bool Isomorphic;
         public bool[] Used;
 
-        public SubgraphIsomorphism(Graph g1, Graph g2, int R) 
+        public SubgraphIsomorphism(Graph g1, Graph g2, int R)
         {
             this.g1 = g1;
             this.g2 = g2;
@@ -110,7 +111,7 @@ namespace PatternMining
                 vis[i] = false;
             }
             int[] que = new int[g1.n];
-            int front =0, rear = 0;           
+            int front = 0, rear = 0;
             que[rear++] = pivot_g;
             vis[pivot_g] = true;
 
@@ -146,7 +147,7 @@ namespace PatternMining
             {
                 vis[i] = false;
             }
-            front = rear = 0;           
+            front = rear = 0;
             que[rear++] = pivot_p;
             vis[pivot_p] = true;
 

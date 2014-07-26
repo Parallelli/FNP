@@ -7,7 +7,7 @@ namespace PatternMining
 {   
     class BuildingBlock
     {
-        public BuildingBlock() { }
+        public BuildingBlock() { VID = new Dictionary<PathPattern, PathSet>(); }
         public List<Graph> getBuildingBlockGraph(Graph graph)
         {
             List<PathPattern> bb = createBuildingBlocks(graph);
@@ -25,7 +25,7 @@ namespace PatternMining
         {
             List<PathPattern> buildingBlocks = new List<PathPattern>();
             Dictionary<int,int> dict = new Dictionary<int,int>();
-            Dictionary<PathPattern, PathSet> VID = new Dictionary<PathPattern, PathSet>();
+            
             Dictionary<string, int> countNextPath = new Dictionary<string, int>();
             Dictionary<string, PathSet> labelPathset = new Dictionary<string, PathSet>();
 
@@ -138,5 +138,6 @@ namespace PatternMining
             }
             return buildingBlocks;
         }
+        public Dictionary<PathPattern, PathSet> VID;
     }
 }
