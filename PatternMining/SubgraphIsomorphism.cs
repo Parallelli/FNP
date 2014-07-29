@@ -9,24 +9,28 @@ namespace PatternMining
     {
         public Graph g1;
         public Graph g2;
-        public int R;
         public List<int>[] Nodes1;
         public List<int>[] Nodes2;
+        public List<int>[] potential;
         public int[] Map;
         public bool Isomorphic;
         public bool[] Used;
 
-        public SubgraphIsomorphism(Graph g1, Graph g2, int R) 
+        public SubgraphIsomorphism(Graph g1, Graph g2) 
         {
             this.g1 = g1;
             this.g2 = g2;
-            this.R = R;
-            Nodes1 = new List<int>[R];
-            Nodes2 = new List<int>[R];
-            for (int i = 0; i < R; ++i)
+            Nodes1 = new List<int>[GlobalVar.radius+1];
+            Nodes2 = new List<int>[GlobalVar.radius+1];
+            for (int i = 0; i <= GlobalVar.radius; ++i)
             {
                 Nodes1[i] = new List<int>();
                 Nodes2[i] = new List<int>();
+            }
+            potential = new List<int>[g2.n];
+            for (int i = 0; i < g2.n; ++i)
+            {
+                potential[i] = new List<int>();
             }
             Map = new int[g2.n];
             Isomorphic = false;
@@ -38,25 +42,25 @@ namespace PatternMining
             for (int u = 0; u < g2.n; ++u)
             {
                 int u1 = Map[u];
-                for (int v = u + 1; v < g2.n; ++v)
+                for (int i = 0; i < g2.adj[u].Count; ++i)
                 {
+                    int v = g2.adj[u][i];
                     int v1 = Map[v];
-                    if (!(g2.adj[u].Contains(v) && g1.adj[u1].Contains(v1)))
+                    if (!g1.adj[u1].Contains(v1))
                         return false;
                 }
             }
             return true;
         }
 
-        public List<List<int>> findPotential()
+        public void findPotential()
         {
-            List<List<int>> potential = new List<List<int>>();
             for (int u = 0; u < g2.n; ++u)
             {
-                potential.Add(new List<int>());
+                potential[u].Clear();
             }
 
-            for (int i = 0; i < R; ++i)
+            for (int i = 0; i <= GlobalVar.radius; ++i)
             {
                 for (int i1 = 0; i1 < Nodes1[i].Count; ++i1)
                 {
@@ -69,12 +73,11 @@ namespace PatternMining
                     }
                 }
             }
-            return potential;
         }
 
-        public void dfs(List<List<int>> potential, int index)
+        public void dfs(int index)
         {
-            if (index >= potential.Count)
+            if (index >= g2.n)
             {
                 if (checkEdges())
                     Isomorphic = true;
@@ -87,7 +90,7 @@ namespace PatternMining
                 {
                     Map[index] = u;
                     Used[u] = true;
-                    dfs(potential, index + 1);
+                    dfs(index + 1);
                     if (Isomorphic)
                         return;
                     Used[u] = false;
@@ -127,19 +130,20 @@ namespace PatternMining
                     int u = que[front++];
                     Nodes1[step].Add(u);
 
-                    for (int i = 0; i < g1.adj[u].Count; ++i)
+                    if (step < GlobalVar.radius)
                     {
-                        int v = g1.adj[u][i];
-                        if (vis[v] == false)
+                        for (int i = 0; i < g1.adj[u].Count; ++i)
                         {
-                            vis[v] = true;
-                            que[rear++] = v;
+                            int v = g1.adj[u][i];
+                            if (vis[v] == false)
+                            {
+                                vis[v] = true;
+                                que[rear++] = v;
+                            }
                         }
                     }
                 }
                 step++;
-                if (step >= R)
-                    break;
             }
 
             for (int i = 0; i < vis.Length; ++i)
@@ -163,24 +167,25 @@ namespace PatternMining
                     int u = que[front++];
                     Nodes2[step].Add(u);
 
-                    for (int i = 0; i < g2.adj[u].Count; ++i)
+                    if (step < GlobalVar.radius)
                     {
-                        int v = g2.adj[u][i];
-                        if (vis[v] == false)
+                        for (int i = 0; i < g2.adj[u].Count; ++i)
                         {
-                            vis[v] = true;
-                            que[rear++] = v;
+                            int v = g2.adj[u][i];
+                            if (vis[v] == false)
+                            {
+                                vis[v] = true;
+                                que[rear++] = v;
+                            }
                         }
                     }
                 }
                 step++;
-                if (step >= R)
-                    break;
             }
 
-            List<List<int>> potential = findPotential();
+            findPotential();
 
-            for (int i = 0; i < potential.Count; ++i)
+            for (int i = 0; i < g2.n; ++i)
             {
                 if (potential[i].Count == 0)
                     return false;
@@ -189,7 +194,7 @@ namespace PatternMining
             {
                 Used[i] = false;
             }
-            dfs(potential, 0);
+            dfs(0);
             return Isomorphic;
         }
     }

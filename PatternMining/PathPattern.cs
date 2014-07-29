@@ -7,7 +7,7 @@ namespace PatternMining
 {
     class PathPattern : IEquatable<PathPattern>
     {
-        public PathPattern() { labelSeq = new List<string>(); patternSize = 0; }
+        public PathPattern() { labelSeq = new List<string>(); patternSize = 0; vid = new HashSet<int>(); }
 
         public void appendLabel(string label)
         {
@@ -21,6 +21,7 @@ namespace PatternMining
 
         private List<string> labelSeq;
         private int patternSize;
+        public HashSet<int> vid; //pivots set
         public int getPatternSize() { return patternSize; }
 
         #region IEquatable<PathPattern> patterns;

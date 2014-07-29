@@ -13,6 +13,19 @@ namespace PatternMining
         {
             nodeSeq.Add(nodeID);
         }
+        internal int getFirstNode()
+        {
+            var ret = 0;
+            try
+            {
+                ret = nodeSeq[0];
+            }
+            catch (IndexOutOfRangeException e)
+            {
+                Console.WriteLine(e.StackTrace);
+            }
+            return ret;
+        }
 
         internal int getLastNode()
         {

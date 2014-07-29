@@ -16,6 +16,8 @@ namespace PatternMining
             {
                 Graph bbGraph = new Graph();
                 bbGraph.buildGraph(pp.getPathPattern());
+                foreach (int v in pp.vid)
+                    bbGraph.vid.Add(v);
                 bbGraphs.Add(bbGraph);
             }
             return bbGraphs;
@@ -77,7 +79,7 @@ namespace PatternMining
                                         var curCnt = 0;
                                         if (countNextPath.TryGetValue(graph.getLabel(neighbor), out curCnt))
                                         {
-                                            countNextPath[graph.getLabel(neighbor)]++;
+                                            countNextPath[graph.getLabel(neighbor)]++;      //wrong support counting
                                             Path cur_path = new Path();
                                             cur_path.appendNode(neighbor);
                                             labelPathset[graph.getLabel(neighbor)].addPath(cur_path);
@@ -124,6 +126,7 @@ namespace PatternMining
                                 foreach (Path p in newPS.getPathSet())
                                 {
                                     VID[newPattern].addPath(p);
+                                    newPattern.vid.Add(p.getFirstNode());   //construct new pattern's vid set
                                 }
                             }
                             else

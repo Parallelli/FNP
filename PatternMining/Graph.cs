@@ -15,6 +15,7 @@ namespace PatternMining
             adj = new List<List<int>>();
             labels = new List<string>();
             deg = new List<int>();
+            vid = new HashSet<int>();
             pivot = 0;
         }
 
@@ -136,9 +137,67 @@ namespace PatternMining
            return g;
         }
 
+        public Graph insertEdge(int from, int to) // return a new graph after inserting an edge
+        {
+            Graph g = new Graph();
+
+            g.n = this.n;
+            g.m = this.m + 1;
+            g.pivot = (this.pivot);
+
+            for (int u = 0; u < this.n; ++u)
+            {
+                g.labels.Add(this.labels[u]);
+                g.deg.Add(this.getDeg(u));
+                for (int i = 0; i < this.adj[u].Count; ++i)
+                {
+                    int v = this.adj[u][i];
+                    g.adj[u].Add(v);
+                }
+            }
+
+            g.adj[from].Add(to);
+            g.adj[to].Add(from);
+            g.deg[from] = g.deg[from] + 1;
+            g.deg[to] = g.deg[to] + 1;
+
+            return g;
+        }
+
+        public Graph insertEdge(string nodeLabel, int from) // return a new graph after inserting a node and an edge associated to it
+        {
+            Graph g = new Graph();
+
+            g.n = this.n + 1;
+            g.m = this.m + 1;
+            g.pivot = (this.pivot);
+
+            for (int u = 0; u < this.n; ++u)
+            {
+                g.labels.Add(this.labels[u]);
+                g.deg.Add(this.getDeg(u));
+                for (int i = 0; i < this.adj[u].Count; ++i)
+                {
+                    int v = this.adj[u][i];
+                    g.adj[u].Add(v);
+                }
+            }
+
+            int to = g.n - 1;
+            g.adj[from].Add(to);
+            g.adj[to].Add(from);
+
+            g.labels.Add(nodeLabel);
+            g.deg.Add(1);
+            g.deg[from] = g.deg[from] + 1;
+
+            return g;
+        }
+
         public List<List<int>> adj;
         public List<string> labels;
         public List<int> deg;
+        public HashSet<int> vid;
         public int n { set; get; }
         public int m { set; get; }
         public int pivot { set; get; }
