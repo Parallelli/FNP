@@ -26,17 +26,17 @@ namespace PatternMining
         private List<PathPattern> createBuildingBlocks(Graph graph)
         {
             List<PathPattern> buildingBlocks = new List<PathPattern>();
-            Dictionary<int,int> dict = new Dictionary<int,int>();
-            
             Dictionary<string, int> countNextPath = new Dictionary<string, int>();
             Dictionary<string, PathSet> labelPathset = new Dictionary<string, PathSet>();
-
+            
             Queue<PathPattern> Q = new Queue<PathPattern>();
             PathPattern empty = new PathPattern(); //when empty path, VID has nothing
             Q.Enqueue(empty);
             while (Q.Count > 0)
             {
                 PathPattern cur = Q.Dequeue();
+                var hash = new HashSet<Tuple<int, string>>(); //tuple<node_id, node_label>
+                countNextPath.Clear();
                 labelPathset.Clear();
                 if (cur.getPatternSize() >= GlobalVar.radius) continue;
                 if (cur.getPatternSize() == 0) //empty path to extend
@@ -76,11 +76,19 @@ namespace PatternMining
                                 {
                                     if (!path.hasNode(neighbor)) // increase cur node's label to count[]
                                     {
+                                        int curPivot = path.getFirstNode();
+                                        string curLabel = graph.getLabel(neighbor);
+                                        var tuple = new Tuple<int, string>(curPivot, curLabel);
+
                                         var curCnt = 0;
                                         if (countNextPath.TryGetValue(graph.getLabel(neighbor), out curCnt))
                                         {
-                                            countNextPath[graph.getLabel(neighbor)]++;      //wrong support counting
-                                            Path cur_path = new Path();
+                                            if (!hash.Contains(tuple))
+                                            {
+                                                hash.Add(tuple);
+                                                countNextPath[graph.getLabel(neighbor)]++;    
+                                            }
+                                            Path cur_path = new Path();                                        
                                             cur_path.appendNode(neighbor);
                                             labelPathset[graph.getLabel(neighbor)].addPath(cur_path);
                                         }
@@ -104,7 +112,7 @@ namespace PatternMining
                     }
                     catch (KeyNotFoundException e)
                     {
-                        Console.WriteLine("no such pattern in VID dictionary!\nCheck your code.");
+                        Console.WriteLine("No such pattern in VID dictionary!\nCheck your code.");
                         Console.WriteLine(e.StackTrace);
                     }
                 }
@@ -115,6 +123,7 @@ namespace PatternMining
                     {
                         PathPattern newPattern = cur;
                         newPattern.appendLabel(entry.Key);
+                        
                         Q.Enqueue(newPattern);
                         buildingBlocks.Add(newPattern);
                         //update VID
@@ -130,7 +139,13 @@ namespace PatternMining
                                 }
                             }
                             else
+                            {
                                 VID.Add(newPattern, newPS);
+                                foreach (Path p in newPS.getPathSet())
+                                {
+                                    newPattern.vid.Add(p.getFirstNode());
+                                }
+                            }
                         }
                         catch (KeyNotFoundException e)
                         {
