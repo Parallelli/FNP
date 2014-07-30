@@ -101,11 +101,10 @@ namespace PatternMining
         {
             int cnt = adj.Count;
             Console.WriteLine("count: " + cnt + " nodes: " + n + " edges: " + m);
-            string test = Console.ReadLine();
             for(int i = 0; i < adj.Count; i++)
             {
                 //Console.ReadLine();
-                string outline = i + " ";
+                string outline = i + " " + this.getLabel(i) + " ";
                 foreach(int node in adj[i])
                 {
                     outline += (node + " ");

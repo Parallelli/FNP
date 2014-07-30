@@ -15,15 +15,20 @@ namespace PatternMining
              */
             GlobalVar.minSup = 5;
             GlobalVar.radius = 3;
-            GlobalVar.inputFilePath = @"D:\Nodes Similarity\Neighbor Pattern\data_dblp_patternmining\dblp.txt";
+            GlobalVar.inputFilePath = @"C:\scratch\github\data\dblp.txt";
 
-            StreamWriter writer = new StreamWriter(@"D:\Nodes Similarity\Neighbor Pattern\data_dblp_patternmining\frequnetPatterns.txt"); 
+            StreamWriter writer = new StreamWriter(@"C:\scratch\github\data\frequnetPatterns.txt"); 
 
             Graph graph = new Graph();
             graph.buildGraph(GlobalVar.inputFilePath);
-            //graph.printGraph();
             BuildingBlock bb = new BuildingBlock();
             List<Graph> bbGraphs = bb.getBuildingBlockGraph(graph);
+
+            foreach (Graph bbi in bbGraphs)
+            {
+                bbi.printGraph();
+            }
+            Console.WriteLine("building block print done");
 
             List<List<Graph>> frequentPatterns = new List<List<Graph>>();
             for (int size = 0; size <= GlobalVar.radius; ++size)

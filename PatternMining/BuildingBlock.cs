@@ -7,7 +7,6 @@ namespace PatternMining
 {   
     class BuildingBlock
     {
-        public BuildingBlock() { VID = new Dictionary<PathPattern, PathSet>(); }
         public List<Graph> getBuildingBlockGraph(Graph graph)
         {
             List<PathPattern> bb = createBuildingBlocks(graph);
@@ -27,11 +26,9 @@ namespace PatternMining
         private List<PathPattern> createBuildingBlocks(Graph graph)
         {
             List<PathPattern> buildingBlocks = new List<PathPattern>();
-            Dictionary<string, int> countNextPath = new Dictionary<string, int>();
-            Dictionary<string, PathSet> labelPathset = new Dictionary<string, PathSet>();
-            
             Queue<PathPattern> Q = new Queue<PathPattern>();
             PathPattern empty = new PathPattern(); //when empty path, VID has nothing
+            Dictionary<string, List<int>> patternVids = new Dictionary<string, List<int>>();
             Q.Enqueue(empty);
             int cnt = 0;
             while (Q.Count > 0)
@@ -39,127 +36,111 @@ namespace PatternMining
                 PathPattern cur = Q.Dequeue();
                 Console.WriteLine("Extending the " + cnt + "-th building block\t");
                 cnt++;
-                var hash = new HashSet<Tuple<int, string>>(); //tuple<node_id, node_label>
-                countNextPath.Clear();
-                labelPathset.Clear();
+                Dictionary<string, int> countNextPath = new Dictionary<string, int>();//next label supp
+                patternVids.Clear();
+                
                 if (cur.getPatternSize() >= GlobalVar.radius) continue;
                 if (cur.getPatternSize() == 0) //empty path to extend
                 {
                     for (int i = 0; i < graph.n; i++)
                     {
-                        var curCnt = 0;
-                        if (countNextPath.TryGetValue(graph.getLabel(i), out curCnt))
+                        var curLabel = graph.getLabel(i);
+                        var curCnt = 0;                     
+                        if (countNextPath.TryGetValue(curLabel, out curCnt))
                         {
-                            countNextPath[graph.getLabel(i)]++;
-                            Path cur_path = new Path();
-                            cur_path.appendNode(i);
-                            labelPathset[graph.getLabel(i)].addPath(cur_path);
+                            countNextPath[curLabel]++;
+                            patternVids[graph.getLabel(i)].Add(i);
                         }
                         else
                         {
-                            countNextPath.Add(graph.getLabel(i), 1);
-                            Path cur_path = new Path();
-                            cur_path.appendNode(i);
-                            PathSet cur_pathSet = new PathSet();
-                            cur_pathSet.addPath(cur_path);
-                            labelPathset.Add(graph.getLabel(i), cur_pathSet);
+                            countNextPath.Add(curLabel, 1);
+                            patternVids.Add(graph.getLabel(i), new List<int>(i));
                         }
+                        
                     }
                 }
                 else // non-empty pathPattern
                 {
                     try
                     {
-                        PathSet ps = VID[cur];
-                        foreach (Path path in ps.getPathSet())
+                        foreach (var pivot in cur.vid)
                         {
-                            int lastNodeInPath = path.getLastNode();
-                            try
+                            //dfs(pivot)
+                            bool[] vis = new bool [graph.n];
+                            vis.Initialize();
+                            vis[pivot] = true;
+                            var newLabels = dfs(graph, pivot, cur.getPathPattern(), cur.getPatternSize(), 1, vis);
+                            //if newLabel is not empty
+                            //append new label to current pattern 
+                            foreach (var newLabel in newLabels)
                             {
-                                foreach (int neighbor in graph.adj[lastNodeInPath]) 
-                                {
-                                    if (!path.hasNode(neighbor)) // increase cur node's label to count[]
-                                    {
-                                        int curPivot = path.getFirstNode();
-                                        string curLabel = graph.getLabel(neighbor);
-                                        var tuple = new Tuple<int, string>(curPivot, curLabel);
-
-                                        var curCnt = 0;
-                                        if (countNextPath.TryGetValue(graph.getLabel(neighbor), out curCnt))
-                                        {
-                                            if (!hash.Contains(tuple))
-                                            {
-                                                hash.Add(tuple);
-                                                countNextPath[graph.getLabel(neighbor)]++;    
-                                            }
-                                            Path cur_path = new Path();                                        
-                                            cur_path.appendNode(neighbor);
-                                            labelPathset[graph.getLabel(neighbor)].addPath(cur_path);
-                                        }
-                                        else
-                                        {
-                                            countNextPath.Add(graph.getLabel(neighbor), 1);
-                                            Path cur_path = new Path();
-                                            cur_path.appendNode(neighbor);
-                                            PathSet cur_pathSet = new PathSet();
-                                            cur_pathSet.addPath(cur_path);
-                                            labelPathset.Add(graph.getLabel(neighbor), cur_pathSet);
-                                        }
-                                    }
-                                }
-                            }
-                            catch(IndexOutOfRangeException e)
-                            {
-                                Console.WriteLine(e.StackTrace);
+                                 int curCnt = 0;
+                                 if (countNextPath.TryGetValue(newLabel, out curCnt))
+                                 {
+                                     countNextPath[newLabel]++;
+                                     patternVids[newLabel].Add(pivot);
+                                 }
+                                 else
+                                 {
+                                     countNextPath.Add(newLabel, 1);
+                                     patternVids.Add(newLabel, new List<int>(pivot));
+                                 }
                             }
                         }
                     }
-                    catch (KeyNotFoundException e)
+                    catch (Exception e)
                     {
-                        Console.WriteLine("No such pattern in VID dictionary!\nCheck your code.");
+                        Console.WriteLine("Check your code.");
                         Console.WriteLine(e.StackTrace);
                     }
                 }
-
-                foreach (KeyValuePair<string,int> entry in countNextPath)
+                //check support
+                foreach (KeyValuePair<string, int> entry in countNextPath)
                 {
+                    var nextLabel = entry.Key;
                     if (entry.Value >= GlobalVar.minSup)
                     {
                         PathPattern newPattern = new PathPattern(cur);
-                        newPattern.appendLabel(entry.Key);
-                        
+                        newPattern.appendLabel(nextLabel);                    
+                        foreach (var cur_vid in patternVids[nextLabel])
+                        {
+                            newPattern.vid.Add(cur_vid);
+                        }
                         Q.Enqueue(newPattern);
                         buildingBlocks.Add(newPattern);
-                        //update VID
-                        try
-                        {
-                            PathSet newPS = labelPathset[entry.Key];
-                            if (VID.ContainsKey(newPattern))
-                            {
-                                foreach (Path p in newPS.getPathSet())
-                                {
-                                    VID[newPattern].addPath(p);
-                                    newPattern.vid.Add(p.getFirstNode());   //construct new pattern's vid set
-                                }
-                            }
-                            else
-                            {
-                                VID.Add(newPattern, newPS);
-                                foreach (Path p in newPS.getPathSet())
-                                {
-                                    newPattern.vid.Add(p.getFirstNode());
-                                }
-                            }
-                        }
-                        catch (KeyNotFoundException e)
-                        {
-                            Console.WriteLine(e.StackTrace);
-                        }
                     }
                 }
             }
             return buildingBlocks;
         }
-        public Dictionary<PathPattern, PathSet> VID;
+
+        private IEnumerable<string> dfs(Graph graph, int id, List<string> existingLabelSeq, int seqSize, int curSize, bool[] vis)
+        {
+            if (curSize == seqSize)
+            {
+                foreach (int neighbor in graph.adj[id])
+                {
+                    string curLabel = graph.getLabel(neighbor);
+                    yield return curLabel;
+                }
+            }
+            else
+            {
+                foreach (int neighbor in graph.adj[id])
+                {
+                    if (!vis[neighbor])
+                    {
+                        string expectedLabel = existingLabelSeq[curSize];
+                        string mylabel = graph.getLabel(neighbor);
+                        if (existingLabelSeq.Equals(mylabel))
+                        {
+                            vis[neighbor] = true;
+                            dfs(graph, neighbor, existingLabelSeq, seqSize, curSize + 1, vis);
+                            vis[neighbor] = false;
+                        }
+                    }
+                }
+            }
+        }
     }
 }
