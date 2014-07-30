@@ -50,6 +50,9 @@ namespace PatternMining
             if (Math.Abs(Pattern1.n - Pattern2.n) > 1)
                 return false;
 
+            if (!Pattern1.getLabel(Pattern1.pivot).Equals(Pattern2.getLabel(Pattern2.pivot)))
+                return false;
+
             Dictionary<string, int> map1 = new Dictionary<string, int>();
             Dictionary<string, int> map2 = new Dictionary<string, int>();
             for (int u = 0; u < Pattern1.n; ++u)
@@ -112,16 +115,20 @@ namespace PatternMining
                 potential[u].Clear();
             }
 
-            for (int i = 0; i <= GlobalVar.radius; ++i)
+            for (int r = 0; r <= GlobalVar.radius; ++r)
             {
-                for (int i1 = 0; i1 < Nodes1[i].Count; ++i1)
+                for (int i = 0; i < Nodes2[r].Count; ++i)
                 {
-                    int u = Nodes1[i][i1];
-                    for (int i2 = 0; i2 < Nodes2[i].Count; ++i2)
+                    int v = Nodes2[r][i];
+                    for (int r1 = 0; r1 <= r; ++r1)
                     {
-                        int v = Nodes2[i][i2];
-                        if (SubPattern.getLabel(v).Equals(Pattern1.getLabel(u)))
-                            potential[v].Add(u);
+                        for (int i1 = 0; i1 < Nodes1[r1].Count; ++i1)
+                        {
+                            int u = Nodes1[r1][i1];
+                            if (SubPattern.getLabel(v).Equals(Pattern1.getLabel(u)) && Pattern1.getDeg(u) >= SubPattern.getDeg(v) 
+                                && Pattern1.getDeg(u) <= SubPattern.getDeg(v) + 1)
+                                potential[v].Add(u);
+                        }
                     }
                 }
             }
@@ -346,7 +353,7 @@ namespace PatternMining
                 }
                 step++;
             }
-            int depth = step;
+            int depth = step-1;
 
             for (int i = 0; i < vis.Length; ++i)
             {
@@ -388,12 +395,7 @@ namespace PatternMining
             for (int v = 0; v < SubPattern.n; ++v)
             {
                 if (vis[v] == false)
-                {
-                    for (int i = step; i < depth; ++i)
-                    {
-                        Nodes2[i].Add(i);
-                    }
-                }
+                    Nodes2[depth].Add(v);
             }
 
             findPotential();
@@ -457,7 +459,7 @@ namespace PatternMining
                 }
                 step++;
             }
-            int depth = step;
+            int depth = step-1;
 
             for (int i = 0; i < vis.Length; ++i)
             {
@@ -499,12 +501,7 @@ namespace PatternMining
             for (int v = 0; v < SubPattern.n; ++v)
             {
                 if (vis[v] == false)
-                {
-                    for (int i = step; i < depth; ++i)
-                    {
-                        Nodes2[i].Add(i);
-                    }
-                }
+                    Nodes2[depth].Add(v);
             }
 
             findPotential();

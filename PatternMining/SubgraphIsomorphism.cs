@@ -60,16 +60,19 @@ namespace PatternMining
                 potential[u].Clear();
             }
 
-            for (int i = 0; i <= GlobalVar.radius; ++i)
+            for (int r = 0; r <= GlobalVar.radius; ++r)
             {
-                for (int i1 = 0; i1 < Nodes1[i].Count; ++i1)
+                for (int i = 0; i < Nodes2[r].Count; ++i)
                 {
-                    int u = Nodes1[i][i1];
-                    for (int i2 = 0; i2 < Nodes2[i].Count; ++i2)
+                    int v = Nodes2[r][i];
+                    for (int r1 = 0; r1 <= r; ++r1)
                     {
-                        int v = Nodes2[i][i2];
-                        if (g2.getLabel(v).Equals(g1.getLabel(u)))
-                            potential[v].Add(u);
+                        for (int i1 = 0; i1 < Nodes1[r1].Count; ++i1)
+                        {
+                            int u = Nodes1[r1][i1];
+                            if(g2.getLabel(v).Equals(g1.getLabel(u)) && g1.getDeg(u) >= g2.getDeg(v))
+                                potential[v].Add(u);
+                        }
                     }
                 }
             }

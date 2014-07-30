@@ -7,7 +7,7 @@ namespace PatternMining
 {   
     class BuildingBlock
     {
-        public BuildingBlock() { }
+        public BuildingBlock() { VID = new Dictionary<PathPattern, PathSet>(); }
         public List<Graph> getBuildingBlockGraph(Graph graph)
         {
             List<PathPattern> bb = createBuildingBlocks(graph);
@@ -25,9 +25,7 @@ namespace PatternMining
 
         private List<PathPattern> createBuildingBlocks(Graph graph)
         {
-            List<PathPattern> buildingBlocks = new List<PathPattern>();
-            Dictionary<int,int> dict = new Dictionary<int,int>();
-            Dictionary<PathPattern, PathSet> VID = new Dictionary<PathPattern, PathSet>();
+            List<PathPattern> buildingBlocks = new List<PathPattern>();         
             Dictionary<string, int> countNextPath = new Dictionary<string, int>();
             Dictionary<string, PathSet> labelPathset = new Dictionary<string, PathSet>();
 
@@ -38,7 +36,8 @@ namespace PatternMining
             {
                 PathPattern cur = Q.Dequeue();
                 labelPathset.Clear();
-                if (cur.getPatternSize() >= GlobalVar.radius) continue;
+                countNextPath.Clear();
+                if (cur.getPatternSize() >= GlobalVar.radius) continue; //is size > radius, do not extend
                 if (cur.getPatternSize() == 0) //empty path to extend
                 {
                     for (int i = 0; i < graph.n; i++)
@@ -141,5 +140,6 @@ namespace PatternMining
             }
             return buildingBlocks;
         }
+        public Dictionary<PathPattern, PathSet> VID;
     }
 }
