@@ -1,0 +1,4 @@
+D:\Algorithm Code\FNP\PatternMining\bin\Release\PatternMining.exe
+D:\Algorithm Code\FNP\PatternMining\bin\Release\PatternMining.pdb
+D:\Algorithm Code\FNP\PatternMining\obj\x86\Release\PatternMining.exe
+D:\Algorithm Code\FNP\PatternMining\obj\x86\Release\PatternMining.pdb

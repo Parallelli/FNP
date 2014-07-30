@@ -5,7 +5,7 @@ using System.Text;
 
 namespace PatternMining
 {
-    class SubgraphIsomorphism
+    class SubgraphIsomorphism   //check if g2 is a subgraph of g1, both g1 and g2 are connected graphs
     {
         public Graph g1;
         public Graph g2;

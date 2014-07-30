@@ -11,6 +11,7 @@ namespace PatternMining
         public List<Graph> getBuildingBlockGraph(Graph graph)
         {
             List<PathPattern> bb = createBuildingBlocks(graph);
+            Console.WriteLine("building block done");
             List<Graph> bbGraphs = new List<Graph>();
             foreach (PathPattern pp in bb)
             {
@@ -32,9 +33,12 @@ namespace PatternMining
             Queue<PathPattern> Q = new Queue<PathPattern>();
             PathPattern empty = new PathPattern(); //when empty path, VID has nothing
             Q.Enqueue(empty);
+            int cnt = 0;
             while (Q.Count > 0)
             {
                 PathPattern cur = Q.Dequeue();
+                Console.WriteLine("Extending the " + cnt + "-th building block\t");
+                cnt++;
                 var hash = new HashSet<Tuple<int, string>>(); //tuple<node_id, node_label>
                 countNextPath.Clear();
                 labelPathset.Clear();
@@ -121,7 +125,7 @@ namespace PatternMining
                 {
                     if (entry.Value >= GlobalVar.minSup)
                     {
-                        PathPattern newPattern = cur;
+                        PathPattern newPattern = new PathPattern(cur);
                         newPattern.appendLabel(entry.Key);
                         
                         Q.Enqueue(newPattern);

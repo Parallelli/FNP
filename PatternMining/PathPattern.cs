@@ -9,6 +9,15 @@ namespace PatternMining
     {
         public PathPattern() { labelSeq = new List<string>(); patternSize = 0; vid = new HashSet<int>(); }
 
+        public PathPattern(PathPattern p)
+        {
+            this.labelSeq = new List<string>();
+            for (int i = 0; i < p.labelSeq.Count; ++i)
+                this.labelSeq.Add(p.labelSeq[i]);
+            patternSize = p.patternSize;
+            vid = new HashSet<int>();
+        }
+
         public void appendLabel(string label)
         {
             labelSeq.Add(label);

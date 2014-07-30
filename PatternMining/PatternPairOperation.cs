@@ -89,23 +89,23 @@ namespace PatternMining
                 return true;
         }
 
-        public int subPatternType(Graph sp)
+        public void findIsoNode(Graph sp)
         {
             isoNode = -1;
-            bool flag = false;
+            //bool flag = false;
             for (int u = 0; u < sp.n; ++u)
             {
                 if (sp.getDeg(u) == 0 && u != sp.pivot)
                 {
                     isoNode = u;
-                    flag = true;
+                    //flag = true;
                     break;
                 }
             }
-            if (flag)
-                return 1;   //sp has no isolated node or the isolated node is the pivot
-            else
-                return 0;   //sp has one isolated node which is not the pivot
+            //if (flag)
+            //    return 1;   //sp has no isolated node or the isolated node is the pivot
+            //else
+            //    return 0;   //sp has one isolated node which is not the pivot
         }
 
         public void findPotential()
@@ -307,113 +307,7 @@ namespace PatternMining
 
         }
 
-        public void joinPatterns1()
-        {
-            for (int i = 0; i <= GlobalVar.radius; ++i)
-            {
-                Nodes1[i].Clear();
-                Nodes2[i].Clear();
-            }
-
-            bool[] vis = new bool[Pattern1.n];
-            for (int i = 0; i < vis.Length; ++i)
-            {
-                vis[i] = false;
-            }
-            int[] que = new int[Pattern1.n];
-            int front = 0, rear = 0;
-            que[rear++] = Pattern1.pivot;
-            vis[Pattern1.pivot] = true;
-
-            int step = 0;
-            for (int i = 0; i < Nodes1.Length; ++i)
-            {
-                Nodes1[i].Clear();
-            }
-            while (front < rear)
-            {
-                int tmp_rear = rear;
-                while (front < tmp_rear)
-                {
-                    int u = que[front++];
-                    Nodes1[step].Add(u);
-
-                    if (step < GlobalVar.radius)
-                    {
-                        for (int i = 0; i < Pattern1.adj[u].Count; ++i)
-                        {
-                            int v = Pattern1.adj[u][i];
-                            if (vis[v] == false)
-                            {
-                                vis[v] = true;
-                                que[rear++] = v;
-                            }
-                        }
-                    }
-                }
-                step++;
-            }
-            int depth = step-1;
-
-            for (int i = 0; i < vis.Length; ++i)
-            {
-                vis[i] = false;
-            }
-            front = rear = 0;
-            que[rear++] = SubPattern.pivot;
-            vis[SubPattern.pivot] = true;
-
-            step = 0;
-            for (int i = 0; i < Nodes2.Length; ++i)
-            {
-                Nodes2[i].Clear();
-            }
-            while (front < rear)
-            {
-                int tmp_rear = rear;
-                while (front < tmp_rear)
-                {
-                    int u = que[front++];
-                    Nodes2[step].Add(u);
-
-                    if (step < GlobalVar.radius)
-                    {
-                        for (int i = 0; i < SubPattern.adj[u].Count; ++i)
-                        {
-                            int v = SubPattern.adj[u][i];
-                            if (vis[v] == false)
-                            {
-                                vis[v] = true;
-                                que[rear++] = v;
-                            }
-                        }
-                    }
-                }
-                step++;
-            }
-
-            for (int v = 0; v < SubPattern.n; ++v)
-            {
-                if (vis[v] == false)
-                    Nodes2[depth].Add(v);
-            }
-
-            findPotential();
-
-            for (int i = 0; i < SubPattern.n; ++i)
-            {
-                if (potential[i].Count == 0)
-                    return;
-            }
-            for (int i = 0; i < Pattern1.n; ++i)
-            {
-                Used[i] = false;
-            }
-            dfs(0);
-
-        }
-
-        public void joinPatterns2()
+        public void joinPatterns()
         {
             for (int i = 0; i <= GlobalVar.radius; ++i)
             {
@@ -533,15 +427,8 @@ namespace PatternMining
                         from = u;
                         to = v;
                         SubPattern = Pattern2.removeEdge(u, v);
-                        int type = subPatternType(SubPattern);
-                        if (type == 0)
-                        {
-                            joinPatterns1();  
-                        }
-                        else if (type == 1)
-                        {
-                            joinPatterns2();
-                        }
+                        findIsoNode(SubPattern);
+                        joinPatterns();
                     }
                 }
             }
