@@ -34,6 +34,12 @@ namespace PatternMining
             while (Q.Count > 0)
             {
                 PathPattern cur = Q.Dequeue();
+                var tmpList = cur.getPathPattern();
+                bool tmpSign = false;
+                if (tmpList.Count == 2 && tmpList[0] == "author" && tmpList[1] == "paper")
+                {
+                    tmpSign = true;
+                }
                 Console.WriteLine("Extending the " + cnt + "-th building block\t" + cur.getPatternSize());
                 cnt++;
                 Dictionary<string, int> countNextPath = new Dictionary<string, int>();//next label supp
@@ -134,15 +140,20 @@ namespace PatternMining
                     {
                         string expectedLabel = existingLabelSeq[curSize];
                         string mylabel = graph.getLabel(neighbor);
-                        if (existingLabelSeq.Equals(mylabel))
+                        if (expectedLabel.Equals(mylabel))
                         {
                             vis[neighbor] = true;
-                            dfs(graph, neighbor, existingLabelSeq, seqSize, curSize + 1, vis);
+                            if(seqSize == curSize + 1)
+                                foreach (var item in dfs(graph, neighbor, existingLabelSeq, seqSize, curSize + 1, vis))
+                                {
+                                    yield return item;
+                                }
                             vis[neighbor] = false;
                         }
                     }
                 }
             }
+
         }
     }
 }
