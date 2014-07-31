@@ -26,7 +26,7 @@ namespace PatternMining
 
             foreach (Graph bbi in bbGraphs)
             {
-                bbi.printGraph();//
+                bbi.printGraph();
             }
             Console.WriteLine("building block print done");
 
