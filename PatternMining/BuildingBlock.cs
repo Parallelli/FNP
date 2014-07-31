@@ -132,28 +132,29 @@ namespace PatternMining
                     res.Add(graph.getLabel(neighbor));
                 }
             }
+            else if (curSize > seqSize) return null;
             else
             {
                 foreach (int neighbor in graph.adj[id])
                 {
-                     if (!vis[neighbor])
-                     {
-                           string expectedLabel = existingLabelSeq[curSize];
-                           string mylabel = graph.getLabel(neighbor);
-                           if (expectedLabel.Equals(mylabel))
-                           {
-                                vis[neighbor] = true;
-                                List<string> tmp = dfs(graph, neighbor, existingLabelSeq, seqSize, curSize + 1, vis);
-                                if(seqSize == curSize + 1)
+                    if (!vis[neighbor])
+                    {
+                        string expectedLabel = existingLabelSeq[curSize];
+                        string mylabel = graph.getLabel(neighbor);
+                        if (expectedLabel.Equals(mylabel))
+                        {
+                            vis[neighbor] = true;
+                            List<string> tmp = dfs(graph, neighbor, existingLabelSeq, seqSize, curSize + 1, vis);
+                            if (seqSize == curSize + 1)
+                            {
+                                foreach (var item in tmp)
                                 {
-                                    foreach (var item in tmp)
-                                    {
-                                        res.Add(item);
-                                    }
+                                    res.Add(item);
                                 }
-                                vis[neighbor] = false;
                             }
+                            vis[neighbor] = false;
                         }
+                    }
                 }
             }
             return res;
