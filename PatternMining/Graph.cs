@@ -213,7 +213,8 @@ namespace PatternMining
         public string getLabel(int nodeID)
         {
             return labels[nodeID];
-        }     
+        }
+      
         internal void buildGraph(List<string> labelSeq) //build graph from a path, i.e. a-p-a
         {
             int nodeCnt = labelSeq.Count;
