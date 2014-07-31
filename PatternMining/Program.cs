@@ -15,9 +15,9 @@ namespace PatternMining
              */
             GlobalVar.minSup = 5;
             GlobalVar.radius = 3;
-            GlobalVar.inputFilePath = @"C:\scratch\github\data\dblp.txt";
+            GlobalVar.inputFilePath = @"D:\Nodes Similarity\Neighbor Pattern\data_dblp_patternmining\dblp.txt";
 
-            StreamWriter writer = new StreamWriter(@"C:\scratch\github\data\frequnetPatterns.txt"); 
+            StreamWriter writer = new StreamWriter(@"D:\Nodes Similarity\Neighbor Pattern\data_dblp_patternmining\frequnetPatterns.txt"); 
 
             Graph graph = new Graph();
             graph.buildGraph(GlobalVar.inputFilePath);
@@ -45,6 +45,7 @@ namespace PatternMining
             while (true)
             {
                 int new_size = s + 1;
+                Console.WriteLine("size=" + new_size + " #subpattern=" + frequentPatterns[s].Count);
                 while (frequentPatterns.Count < new_size + 1)
                     frequentPatterns.Add(new List<Graph>());
                 bool flag = false;
@@ -52,6 +53,7 @@ namespace PatternMining
                 {
                     for (int j = i; j < frequentPatterns[s].Count; ++j)
                     {
+                        Console.WriteLine(i + "\t" + j);
                         PatternPairOperation ppo = new PatternPairOperation(frequentPatterns[s][i], frequentPatterns[s][j], graph, 
                             frequentPatterns[new_size]);
                         List<Graph> newPatterns = ppo.generateNewPatterns();
