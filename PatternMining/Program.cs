@@ -19,7 +19,6 @@ namespace PatternMining
 
             StreamWriter writer = new StreamWriter(@"C:\scratch\github\data\frequnetPatterns.txt"); 
 
-
             Graph graph = new Graph();
             graph.buildGraph(GlobalVar.inputFilePath);
             BuildingBlock bb = new BuildingBlock();
