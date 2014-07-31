@@ -127,6 +127,7 @@ namespace PatternMining
                    g.deg.Add(this.getDeg(u) - 1);
                else
                    g.deg.Add(this.getDeg(u));
+               g.adj.Add(new List<int>());
                for (int i = 0; i < this.adj[u].Count; ++i)
                {
                    int v = this.adj[u][i];
@@ -150,6 +151,7 @@ namespace PatternMining
             {
                 g.labels.Add(this.labels[u]);
                 g.deg.Add(this.getDeg(u));
+                g.adj.Add(new List<int>());
                 for (int i = 0; i < this.adj[u].Count; ++i)
                 {
                     int v = this.adj[u][i];
@@ -177,13 +179,14 @@ namespace PatternMining
             {
                 g.labels.Add(this.labels[u]);
                 g.deg.Add(this.getDeg(u));
+                g.adj.Add(new List<int>());
                 for (int i = 0; i < this.adj[u].Count; ++i)
                 {
                     int v = this.adj[u][i];
                     g.adj[u].Add(v);
                 }
             }
-
+            g.adj.Add(new List<int>());
             int to = g.n - 1;
             g.adj[from].Add(to);
             g.adj[to].Add(from);

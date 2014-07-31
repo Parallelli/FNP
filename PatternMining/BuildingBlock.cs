@@ -34,7 +34,7 @@ namespace PatternMining
             while (Q.Count > 0)
             {
                 PathPattern cur = Q.Dequeue();
-                Console.WriteLine("Extending the " + cnt + "-th building block\t");
+                Console.WriteLine("Extending the " + cnt + "-th building block\t" + cur.getPatternSize());
                 cnt++;
                 Dictionary<string, int> countNextPath = new Dictionary<string, int>();//next label supp
                 patternVids.Clear();

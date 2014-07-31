@@ -136,6 +136,13 @@ namespace PatternMining
 
         public bool checkEdges()
         {
+            if (isoNode == -1)
+            {
+                int u1 = Map[from];
+                int u2 = Map[to];
+                if (Pattern1.adj[u1].Contains(u2))
+                    return false;
+            }
             for (int u = 0; u < SubPattern.n; ++u)
             {
                 if (u != isoNode)
@@ -265,8 +272,12 @@ namespace PatternMining
                     to1 = Map[to];
                 }
                 Graph newG = Pattern1.insertEdge(from1, to1);
+                Console.WriteLine("test new pattern");
                 if (validPattern(newG))
+                {
                     new_patterns.Add(newG);
+                    Console.WriteLine("Find a new Pattern");
+                }
             }
             if(isoNode != -1)
             {
@@ -276,8 +287,12 @@ namespace PatternMining
                 else
                     to1 = Map[from];
                 Graph newG = Pattern1.insertEdge(SubPattern.getLabel(isoNode), to1);
+                Console.WriteLine("test new pattern");
                 if (validPattern(newG))
+                {
                     new_patterns.Add(newG);
+                    Console.WriteLine("Find a new Pattern");
+                }
             }
         }
 
