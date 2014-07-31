@@ -122,38 +122,41 @@ namespace PatternMining
             return buildingBlocks;
         }
 
-        private IEnumerable<string> dfs(Graph graph, int id, List<string> existingLabelSeq, int seqSize, int curSize, bool[] vis)
+        private List<string> dfs(Graph graph, int id, List<string> existingLabelSeq, int seqSize, int curSize, bool[] vis)
         {
+            List<string> res = new List<string>();
             if (curSize == seqSize)
             {
                 foreach (int neighbor in graph.adj[id])
                 {
-                    string curLabel = graph.getLabel(neighbor);
-                    yield return curLabel;
+                    res.Add(graph.getLabel(neighbor));
                 }
             }
             else
             {
                 foreach (int neighbor in graph.adj[id])
                 {
-                    if (!vis[neighbor])
-                    {
-                        string expectedLabel = existingLabelSeq[curSize];
-                        string mylabel = graph.getLabel(neighbor);
-                        if (expectedLabel.Equals(mylabel))
-                        {
-                            vis[neighbor] = true;
-                            if(seqSize == curSize + 1)
-                                foreach (var item in dfs(graph, neighbor, existingLabelSeq, seqSize, curSize + 1, vis))
+                     if (!vis[neighbor])
+                     {
+                           string expectedLabel = existingLabelSeq[curSize];
+                           string mylabel = graph.getLabel(neighbor);
+                           if (expectedLabel.Equals(mylabel))
+                           {
+                                vis[neighbor] = true;
+                                List<string> tmp = dfs(graph, neighbor, existingLabelSeq, seqSize, curSize + 1, vis);
+                                if(seqSize == curSize + 1)
                                 {
-                                    yield return item;
+                                    foreach (var item in tmp)
+                                    {
+                                        res.Add(item);
+                                    }
                                 }
-                            vis[neighbor] = false;
+                                vis[neighbor] = false;
+                            }
                         }
-                    }
                 }
             }
-
+            return res;
         }
     }
 }
