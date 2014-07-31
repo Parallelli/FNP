@@ -222,7 +222,7 @@ namespace PatternMining
             for (int i = 0; i < labelSeq.Count; i++)
             {
                 List<int> tmp = new List<int>();
-                tmp.Add(i);
+                //tmp.Add(i);
                 //labels[i] = labelSeq[i];
                 labels.Add(labelSeq[i]);
                 if (i - 1 >= 0) tmp.Add(i - 1);

@@ -60,12 +60,14 @@ namespace PatternMining
                 potential[u].Clear();
             }
 
-            for (int r = 0; r <= GlobalVar.radius; ++r)
+            potential[g2.pivot].Add(g1.pivot);
+
+            for (int r = 1; r <= GlobalVar.radius; ++r)
             {
                 for (int i = 0; i < Nodes2[r].Count; ++i)
                 {
                     int v = Nodes2[r][i];
-                    for (int r1 = 0; r1 <= r; ++r1)
+                    for (int r1 = 1; r1 <= r; ++r1)
                     {
                         for (int i1 = 0; i1 < Nodes1[r1].Count; ++i1)
                         {
@@ -106,6 +108,8 @@ namespace PatternMining
         {
             Isomorphic = false;
             if (g1.n < g2.n) return false;
+            if (!g1.getLabel(g1.pivot).Equals(g2.getLabel(g2.pivot)))
+                return false;
 
             int pivot_g = g1.pivot;
             int pivot_p = g2.pivot;
@@ -117,47 +121,10 @@ namespace PatternMining
             }
             int[] que = new int[g1.n];
             int front =0, rear = 0;           
-            que[rear++] = pivot_g;
-            vis[pivot_g] = true;
-
-            int step = 0;
-            for (int i = 0; i < Nodes1.Length; ++i)
-            {
-                Nodes1[i].Clear();
-            }
-            while (front < rear)
-            {
-                int tmp_rear = rear;
-                while (front < tmp_rear)
-                {
-                    int u = que[front++];
-                    Nodes1[step].Add(u);
-
-                    if (step < GlobalVar.radius)
-                    {
-                        for (int i = 0; i < g1.adj[u].Count; ++i)
-                        {
-                            int v = g1.adj[u][i];
-                            if (vis[v] == false)
-                            {
-                                vis[v] = true;
-                                que[rear++] = v;
-                            }
-                        }
-                    }
-                }
-                step++;
-            }
-
-            for (int i = 0; i < vis.Length; ++i)
-            {
-                vis[i] = false;
-            }
-            front = rear = 0;           
             que[rear++] = pivot_p;
             vis[pivot_p] = true;
 
-            step = 0;
+            int step = 0;
             for (int i = 0; i < Nodes2.Length; ++i)
             {
                 Nodes2[i].Clear();
@@ -185,6 +152,48 @@ namespace PatternMining
                 }
                 step++;
             }
+            int depth = step - 1;
+            int cnt_p = rear;
+
+            for (int i = 0; i < vis.Length; ++i)
+            {
+                vis[i] = false;
+            }
+            front = rear = 0;           
+            que[rear++] = pivot_g;
+            vis[pivot_g] = true;
+
+            step = 0;
+            for (int i = 0; i < Nodes1.Length; ++i)
+            {
+                Nodes1[i].Clear();
+            }
+            while (front < rear)
+            {
+                int tmp_rear = rear;
+                while (front < tmp_rear)
+                {
+                    int u = que[front++];
+                    Nodes1[step].Add(u);
+
+                    if (step < depth)
+                    {
+                        for (int i = 0; i < g1.adj[u].Count; ++i)
+                        {
+                            int v = g1.adj[u][i];
+                            if (vis[v] == false)
+                            {
+                                vis[v] = true;
+                                que[rear++] = v;
+                            }
+                        }
+                    }
+                }
+                step++;
+            }
+            int cnt_g = rear;
+            if (cnt_g < cnt_p)
+                return false;
 
             findPotential();
 

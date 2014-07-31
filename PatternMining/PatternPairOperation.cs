@@ -115,12 +115,14 @@ namespace PatternMining
                 potential[u].Clear();
             }
 
-            for (int r = 0; r <= GlobalVar.radius; ++r)
+            potential[SubPattern.pivot].Add(Pattern1.pivot);
+
+            for (int r = 1; r <= GlobalVar.radius; ++r)
             {
                 for (int i = 0; i < Nodes2[r].Count; ++i)
                 {
                     int v = Nodes2[r][i];
-                    for (int r1 = 0; r1 <= r; ++r1)
+                    for (int r1 = 1; r1 <= r; ++r1)
                     {
                         for (int i1 = 0; i1 < Nodes1[r1].Count; ++i1)
                         {
@@ -193,7 +195,10 @@ namespace PatternMining
                 step++;
             }
             if (step > GlobalVar.radius)
+            {
+                Console.WriteLine("New Pattern is to large");
                 return false;
+            }
 
             bool flag = false;
             for (int i = 0; i < old_patterns.Count; ++i)
@@ -215,10 +220,31 @@ namespace PatternMining
                 }
             }
             if (flag)
+            {
+                Console.WriteLine("New Pattern already exists");
                 return false;
+            }
 
-            int cnt = 0;
+            HashSet<int> checkNodes = new HashSet<int>();
             foreach (int v in Pattern1.vid)
+                if (Pattern2.vid.Contains(v))
+                    checkNodes.Add(v);
+            int cnt = 0;
+            int num = 0;
+            foreach (int v in checkNodes)
+            {
+                if (cnt + checkNodes.Count - num < GlobalVar.minSup)
+                    break;
+                num++;
+                G.pivot = v;
+                SubgraphIsomorphism si = new SubgraphIsomorphism(G, p);
+                if (si.containPattern())
+                {
+                    cnt++;
+                    p.vid.Add(v);
+                }
+            }
+            /*foreach (int v in Pattern1.vid)
             {
                 if (Pattern2.vid.Contains(v))
                 {
@@ -230,10 +256,12 @@ namespace PatternMining
                         p.vid.Add(v);
                     }
                 }
-            }
+            }*/
             if (cnt < GlobalVar.minSup)
+            {
+                Console.WriteLine("Support of New Pattern is less than the threshold " + cnt);
                 return false;
-
+            }
             return true;
         }
 
@@ -271,12 +299,16 @@ namespace PatternMining
                     from1 = Map[from];
                     to1 = Map[to];
                 }
-                Graph newG = Pattern1.insertEdge(from1, to1);
-                Console.WriteLine("test new pattern");
-                if (validPattern(newG))
+                if (!Pattern1.adj[from1].Contains(to))
                 {
-                    new_patterns.Add(newG);
-                    Console.WriteLine("Find a new Pattern");
+                    Graph newG = Pattern1.insertEdge(from1, to1);
+                    Console.WriteLine("test new pattern");
+                    newG.printGraph();
+                    if (validPattern(newG))
+                    {
+                        new_patterns.Add(newG);
+                        Console.WriteLine("Find a new Pattern");
+                    }
                 }
             }
             if(isoNode != -1)
@@ -288,6 +320,7 @@ namespace PatternMining
                     to1 = Map[from];
                 Graph newG = Pattern1.insertEdge(SubPattern.getLabel(isoNode), to1);
                 Console.WriteLine("test new pattern");
+                newG.printGraph();
                 if (validPattern(newG))
                 {
                     new_patterns.Add(newG);
