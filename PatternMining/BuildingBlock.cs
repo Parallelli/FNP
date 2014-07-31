@@ -80,7 +80,10 @@ namespace PatternMining
                             
                             foreach (var newLabel in newLabels)
                             {
-                                
+                                if (newLabel.Equals("paper"))
+                                {
+                                    Console.WriteLine();
+                                }
                                 int curCnt = 0;
                                 if (countNextPath.TryGetValue(newLabel, out curCnt))
                                 {
