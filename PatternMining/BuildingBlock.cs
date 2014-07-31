@@ -55,8 +55,7 @@ namespace PatternMining
                         {
                             countNextPath.Add(curLabel, 1);
                             patternVids.Add(graph.getLabel(i), new List<int>(i));
-                        }
-                        
+                        }                      
                     }
                 }
                 else // non-empty pathPattern
@@ -72,20 +71,23 @@ namespace PatternMining
                             var newLabels = dfs(graph, pivot, cur.getPathPattern(), cur.getPatternSize(), 1, vis);
                             //if newLabel is not empty
                             //append new label to current pattern 
+                            
                             foreach (var newLabel in newLabels)
                             {
-                                 int curCnt = 0;
-                                 if (countNextPath.TryGetValue(newLabel, out curCnt))
-                                 {
-                                     countNextPath[newLabel]++;
-                                     patternVids[newLabel].Add(pivot);
-                                 }
-                                 else
-                                 {
-                                     countNextPath.Add(newLabel, 1);
-                                     patternVids.Add(newLabel, new List<int>(pivot));
-                                 }
+                                
+                                int curCnt = 0;
+                                if (countNextPath.TryGetValue(newLabel, out curCnt))
+                                {
+                                    countNextPath[newLabel]++;
+                                    patternVids[newLabel].Add(pivot);
+                                }
+                                else
+                                {
+                                    countNextPath.Add(newLabel, 1);
+                                    patternVids.Add(newLabel, new List<int>(pivot));
+                                }
                             }
+                            
                         }
                     }
                     catch (Exception e)
