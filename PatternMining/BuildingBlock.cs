@@ -34,6 +34,12 @@ namespace PatternMining
             while (Q.Count > 0)
             {
                 PathPattern cur = Q.Dequeue();
+                var tmpList = cur.getPathPattern();
+                bool tmpSign = false;
+                if (tmpList.Count == 2 && tmpList[0] == "author" && tmpList[1] == "paper")
+                {
+                    tmpSign = true;
+                }
                 Console.WriteLine("Extending the " + cnt + "-th building block\t" + cur.getPatternSize());
                 cnt++;
                 Dictionary<string, int> countNextPath = new Dictionary<string, int>();//next label supp
@@ -116,33 +122,41 @@ namespace PatternMining
             return buildingBlocks;
         }
 
-        private IEnumerable<string> dfs(Graph graph, int id, List<string> existingLabelSeq, int seqSize, int curSize, bool[] vis)
+        private List<string> dfs(Graph graph, int id, List<string> existingLabelSeq, int seqSize, int curSize, bool[] vis)
         {
+            List<string> res = new List<string>();
             if (curSize == seqSize)
             {
                 foreach (int neighbor in graph.adj[id])
                 {
-                    string curLabel = graph.getLabel(neighbor);
-                    yield return curLabel;
+                    res.Add(graph.getLabel(neighbor));
                 }
             }
             else
             {
                 foreach (int neighbor in graph.adj[id])
                 {
-                    if (!vis[neighbor])
-                    {
-                        string expectedLabel = existingLabelSeq[curSize];
-                        string mylabel = graph.getLabel(neighbor);
-                        if (existingLabelSeq.Equals(mylabel))
-                        {
-                            vis[neighbor] = true;
-                            dfs(graph, neighbor, existingLabelSeq, seqSize, curSize + 1, vis);
-                            vis[neighbor] = false;
+                     if (!vis[neighbor])
+                     {
+                           string expectedLabel = existingLabelSeq[curSize];
+                           string mylabel = graph.getLabel(neighbor);
+                           if (expectedLabel.Equals(mylabel))
+                           {
+                                vis[neighbor] = true;
+                                List<string> tmp = dfs(graph, neighbor, existingLabelSeq, seqSize, curSize + 1, vis);
+                                if(seqSize == curSize + 1)
+                                {
+                                    foreach (var item in tmp)
+                                    {
+                                        res.Add(item);
+                                    }
+                                }
+                                vis[neighbor] = false;
+                            }
                         }
-                    }
                 }
             }
+            return res;
         }
     }
 }
