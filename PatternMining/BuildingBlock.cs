@@ -36,7 +36,7 @@ namespace PatternMining
                 PathPattern cur = Q.Dequeue();
                 var tmpList = cur.getPathPattern();
                 bool tmpSign = false;
-                if (tmpList.Count == 2 && tmpList[0] == "author" && tmpList[1] == "paper")
+                if (tmpList.Count == 1 && tmpList[0] == "paper")
                 {
                     tmpSign = true;
                 }
