@@ -71,15 +71,9 @@ namespace PatternMining
                             candidates.Clear();
                             var newLabels = dfs(graph, pivot, cur.getPathPattern(), cur.getPatternSize(), 1, vis);                          
                             //if newLabel is not empty
-                            //append new label to current pattern 
-                            
+                            //append new label to current pattern                            
                             foreach (var newLabel in candidates)
                             {
-
-                                /*if (newLabel.Equals("paper"))
-                                {
-                                    Console.WriteLine();
-                                }*/
                                 int curCnt = 0;
                                 if (countNextPath.TryGetValue(newLabel, out curCnt))
                                 {

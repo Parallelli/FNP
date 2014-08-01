@@ -91,23 +91,18 @@ namespace PatternMining
                     tmp.Add(id1);
                     adj.Add(tmp);
                     deg.Add(1);
-                }
-                //if (id1 == 57)
-                //{
-                //    Console.WriteLine();
-                //}
-                //if (id1 == 17805)
-                //{
-                //    Console.WriteLine();
-                //}
-                //if (labels[id1].Equals(labels[id2]))
-                  //  Console.WriteLine(line);
+                }               
             }
 
             
             n = idCnt;
             m = edgeCnt;
-
+            StreamWriter sw = new StreamWriter(GlobalVar.idMapFilePath);
+            foreach (KeyValuePair<string, int> entry in idMap)
+            {
+                sw.WriteLine(entry.Value + "\t" + entry.Key);
+            }
+            sw.Close();
             Console.WriteLine("graph has been build");
         }
         public void printGraph()
@@ -116,7 +111,6 @@ namespace PatternMining
             Console.WriteLine("count: " + cnt + " nodes: " + n + " edges: " + m);
             for(int i = 0; i < adj.Count; i++)
             {
-                //Console.ReadLine();
                 string outline = i + " " + this.getLabel(i) + " degree:" + this.getDeg(i) + " neighbors:";
                 foreach(int node in adj[i])
                 {

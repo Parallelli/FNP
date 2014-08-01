@@ -10,5 +10,6 @@ namespace PatternMining
         public static int minSup { get; set; }
         public static int radius { get; set;}
         public static string inputFilePath { get; set; }
+        public static string idMapFilePath { get; set; }
     }
 }
