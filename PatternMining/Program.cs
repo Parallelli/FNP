@@ -15,12 +15,48 @@ namespace PatternMining
              */
             GlobalVar.minSup = 50;
             GlobalVar.radius = 3;
-            GlobalVar.inputFilePath = @"D:\Nodes Similarity\Neighbor Pattern\data_dblp_patternmining\dblp.txt";  //C:\scratch\github\data
+            GlobalVar.inputFilePath = @"D:\Nodes Similarity\Neighbor Pattern\data_dblp_patternmining\dblp_new.txt";  //C:\scratch\github\data
 
             StreamWriter writer = new StreamWriter(@"D:\Nodes Similarity\Neighbor Pattern\data_dblp_patternmining\frequnetPatterns.txt");  //C:\scratch\github\data
 
             Graph graph = new Graph();
             graph.buildGraph(GlobalVar.inputFilePath);
+
+            //Graph pattern = new Graph();
+            //pattern.pivot = 0;
+            //pattern.n = 4;
+            //pattern.m = 4;
+            //pattern.labels.Add("author");
+            //pattern.labels.Add("author");
+            //pattern.labels.Add("paper");
+            //pattern.labels.Add("paper");
+            //pattern.deg.Add(2);
+            //pattern.deg.Add(2);
+            //pattern.deg.Add(2);
+            //pattern.deg.Add(2);
+            //pattern.adj.Add(new List<int>());
+            //pattern.adj.Add(new List<int>());
+            //pattern.adj.Add(new List<int>());
+            //pattern.adj.Add(new List<int>());
+            //pattern.adj[0].Add(2);
+            //pattern.adj[0].Add(3);
+            //pattern.adj[1].Add(2);
+            //pattern.adj[1].Add(3);
+            //pattern.adj[2].Add(0);
+            //pattern.adj[2].Add(1);
+            //pattern.adj[3].Add(0);
+            //pattern.adj[3].Add(1);
+
+            //int cnt = 0;
+            //for (int v = 0; v < graph.n; ++v)
+            //{
+            //    graph.pivot = v;
+            //    SubgraphIsomorphism si = new SubgraphIsomorphism(graph, pattern);
+            //    if (si.containPattern())
+            //        cnt++;
+            //}
+
+            //Console.WriteLine(cnt);
             BuildingBlock bb = new BuildingBlock();
             List<Graph> bbGraphs = bb.getBuildingBlockGraph(graph);
 
@@ -79,7 +115,7 @@ namespace PatternMining
                         Console.WriteLine(i + " " + j + " " + num);
                         //frequentPatterns[s][i].printGraph();
                         //frequentPatterns[s][j].printGraph();
-                        PatternPairOperation ppo = new PatternPairOperation(frequentPatterns[s][i], frequentPatterns[s][j], graph, 
+                        PatternPairOperation ppo = new PatternPairOperation(frequentPatterns[s][i], frequentPatterns[s][j], graph,
                             frequentPatterns[new_size]);
                         List<Graph> newPatterns = ppo.generateNewPatterns();
                         if (newPatterns.Count > 0)
@@ -114,7 +150,7 @@ namespace PatternMining
                 s++;
             }
 
-            
+
             /*for (int i = 0; i < frequentPatterns.Count; ++i)
             {
                 for (int j = 0; j < frequentPatterns[i].Count; ++j)
