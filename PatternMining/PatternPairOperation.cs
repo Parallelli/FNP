@@ -13,6 +13,7 @@ namespace PatternMining
         public Graph G;
         public List<Graph> new_patterns;
         public List<Graph> old_patterns;
+        public List<Graph> nonFreq_patterns;
         public List<int>[] potential;
         public List<int>[] Nodes1;
         public List<int>[] Nodes2;
@@ -36,6 +37,7 @@ namespace PatternMining
             }
             this.G = G;
             new_patterns = new List<Graph>();
+            nonFreq_patterns = new List<Graph>();
             this.old_patterns = old_patterns;
             Map = new int[this.Pattern2.n];
             Used = new bool[this.Pattern1.n];
@@ -236,6 +238,11 @@ namespace PatternMining
                     break;
                 }
             }
+            if (flag)
+            {
+                Console.WriteLine("New Pattern already exists");
+                return false;
+            }
             for (int i = 0; i < new_patterns.Count; ++i)
             {
                 SubgraphIsomorphism si = new SubgraphIsomorphism(new_patterns[i], p);
@@ -248,6 +255,21 @@ namespace PatternMining
             if (flag)
             {
                 Console.WriteLine("New Pattern already exists");
+                return false;
+            }
+
+            for (int i = 0; i < nonFreq_patterns.Count; ++i)
+            {
+                SubgraphIsomorphism si = new SubgraphIsomorphism(nonFreq_patterns[i], p);
+                if (si.containPattern())
+                {
+                    flag = true;
+                    break;
+                }
+            }
+            if (flag)
+            {
+                Console.WriteLine("New Pattern is not frequent");
                 return false;
             }
 
@@ -286,6 +308,7 @@ namespace PatternMining
             if (cnt < GlobalVar.minSup)
             {
                 Console.WriteLine("Support of New Pattern is less than the threshold " + cnt);
+                nonFreq_patterns.Add(p);
                 return false;
             }
             return true;
