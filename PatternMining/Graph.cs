@@ -80,7 +80,7 @@ namespace PatternMining
                     adj.Add(tmp);
                     deg.Add(1);
                 }
-                if (hasShow2)
+                if (hasShow2 && id2 != id1)
                 {
                     adj[id2].Add(id1);
                     deg[id2]++;
@@ -92,9 +92,18 @@ namespace PatternMining
                     adj.Add(tmp);
                     deg.Add(1);
                 }
-                if (labels[id1].Equals(labels[id2]))
-                    Console.WriteLine(line);
+                //if (id1 == 57)
+                //{
+                //    Console.WriteLine();
+                //}
+                //if (id1 == 17805)
+                //{
+                //    Console.WriteLine();
+                //}
+                //if (labels[id1].Equals(labels[id2]))
+                  //  Console.WriteLine(line);
             }
+
             
             n = idCnt;
             m = edgeCnt;
@@ -108,7 +117,7 @@ namespace PatternMining
             for(int i = 0; i < adj.Count; i++)
             {
                 //Console.ReadLine();
-                string outline = i + " " + this.getLabel(i) + " ";
+                string outline = i + " " + this.getLabel(i) + " degree:" + this.getDeg(i) + " neighbors:";
                 foreach(int node in adj[i])
                 {
                     outline += (node + " ");

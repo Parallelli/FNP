@@ -19,7 +19,7 @@ namespace Gadgets
             //f3 = Console.ReadLine();
             f1 = @"C:\scratch\github\data\paper_author.txt";
             f2 = @"C:\scratch\github\data\paper_conf.txt";
-            f3 = @"C:\scratch\github\data\dblp.txt";
+            f3 = @"C:\scratch\github\data\dblp_new.txt";
             
             Dictionary<string, string> conf = getConfDict(@"C:\scratch\github\data\conf.txt");
             string[] lines = System.IO.File.ReadAllLines(f1);
@@ -27,7 +27,7 @@ namespace Gadgets
             foreach (string line in lines)
             {
                 string[] tokens = line.Split();
-                string outline = tokens[0] + "\t" + "paper" + "\t" + tokens[1] + "\t" + "author";
+                string outline = "p"+tokens[0] + "\t" + "paper" + "\t" + "a"+tokens[1] + "\t" + "author";
                 writer.WriteLine(outline);
             }
             //
@@ -36,7 +36,7 @@ namespace Gadgets
             foreach (string line in lines)
             {
                 string[] tokens = line.Split();
-                string outline = tokens[0] + "\t" + "paper" + "\t" + tokens[1] + "\t" + conf[tokens[1]];
+                string outline = "p"+tokens[0] + "\t" + "paper" + "\t" + "c"+tokens[1] + "\t" + conf[tokens[1]];
                 writer.WriteLine(outline);
             }
             writer.Close();

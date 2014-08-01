@@ -34,12 +34,6 @@ namespace PatternMining
             while (Q.Count > 0)
             {
                 PathPattern cur = Q.Dequeue();
-                var tmpList = cur.getPathPattern();
-                bool tmpSign = false;
-                if (tmpList.Count == 1 && tmpList[0] == "paper")
-                {
-                    tmpSign = true;
-                }
                 Console.WriteLine("Extending the " + cnt + "-th building block\t" + cur.getPatternSize());
                 cnt++;
                 Dictionary<string, int> countNextPath = new Dictionary<string, int>();//next label supp
@@ -74,12 +68,14 @@ namespace PatternMining
                             bool[] vis = new bool [graph.n];
                             vis.Initialize();
                             vis[pivot] = true;
-                            var newLabels = dfs(graph, pivot, cur.getPathPattern(), cur.getPatternSize(), 1, vis);
+                            candidates.Clear();
+                            var newLabels = dfs(graph, pivot, cur.getPathPattern(), cur.getPatternSize(), 1, vis);                          
                             //if newLabel is not empty
                             //append new label to current pattern 
                             
-                            foreach (var newLabel in newLabels)
+                            foreach (var newLabel in candidates)
                             {
+
                                 /*if (newLabel.Equals("paper"))
                                 {
                                     Console.WriteLine();
@@ -95,8 +91,7 @@ namespace PatternMining
                                     countNextPath.Add(newLabel, 1);
                                     patternVids.Add(newLabel, new List<int>(pivot));
                                 }
-                            }
-                            
+                            }                        
                         }
                     }
                     catch (Exception e)
@@ -125,18 +120,21 @@ namespace PatternMining
             return buildingBlocks;
         }
 
-        private List<string> dfs(Graph graph, int id, List<string> existingLabelSeq, int seqSize, int curSize, bool[] vis)
+        private HashSet<string> dfs(Graph graph, int id, List<string> existingLabelSeq, int seqSize, int curSize, bool[] vis)
         {
-            List<string> res = new List<string>();
+            HashSet<string> res = new HashSet<string>();
             if (curSize == seqSize)
             {
                 foreach (int neighbor in graph.adj[id])
                 {
-                    res.Add(graph.getLabel(neighbor));
+                    if (!vis[neighbor])
+                    {
+                        res.Add(graph.getLabel(neighbor));
+                        candidates.Add(graph.getLabel(neighbor));
+                    }
                 }
             }
-            else if (curSize > seqSize) return null;
-            else
+            else if(curSize < seqSize)
             {
                 foreach (int neighbor in graph.adj[id])
                 {
@@ -147,12 +145,12 @@ namespace PatternMining
                         if (expectedLabel.Equals(mylabel))
                         {
                             vis[neighbor] = true;
-                            List<string> tmp = dfs(graph, neighbor, existingLabelSeq, seqSize, curSize + 1, vis);
+                            HashSet<string> tmp = dfs(graph, neighbor, existingLabelSeq, seqSize, curSize + 1, vis);
                             if (seqSize == curSize + 1)
-                            {
+                            {                               
                                 foreach (var item in tmp)
                                 {
-                                    res.Add(item);
+                                    res.Add(item);   
                                 }
                             }
                             vis[neighbor] = false;
@@ -162,5 +160,6 @@ namespace PatternMining
             }
             return res;
         }
+        public static HashSet<string> candidates = new HashSet<string>();
     }
 }

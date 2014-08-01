@@ -24,13 +24,21 @@ namespace PatternMining
 
         public PatternPairOperation(Graph Pattern1, Graph Pattern2, Graph G, List<Graph> old_patterns)
         {
-            this.Pattern1 = Pattern1;
-            this.Pattern2 = Pattern2;
+            if (Pattern1.n < Pattern2.n)
+            {
+                this.Pattern1 = Pattern2;
+                this.Pattern2 = Pattern1;
+            }
+            else
+            {
+                this.Pattern1 = Pattern1;
+                this.Pattern2 = Pattern2;
+            }
             this.G = G;
             new_patterns = new List<Graph>();
             this.old_patterns = old_patterns;
-            Map = new int[Pattern2.n];
-            Used = new bool[Pattern1.n];
+            Map = new int[this.Pattern2.n];
+            Used = new bool[this.Pattern1.n];
             Nodes1 = new List<int>[GlobalVar.radius + 1];
             Nodes2 = new List<int>[GlobalVar.radius + 1];
             for (int i = 0; i <= GlobalVar.radius; ++i)
@@ -38,8 +46,8 @@ namespace PatternMining
                 Nodes1[i] = new List<int>();
                 Nodes2[i] = new List<int>();
             }
-            potential = new List<int>[Pattern2.n];
-            for (int i = 0; i < Pattern2.n; ++i)
+            potential = new List<int>[this.Pattern2.n];
+            for (int i = 0; i < this.Pattern2.n; ++i)
             {
                 potential[i] = new List<int>();
             }
@@ -167,6 +175,24 @@ namespace PatternMining
 
         public bool validPattern(Graph p)
         {
+            //Dictionary<string, int> count = new Dictionary<string, int>();
+            //for (int u = 0; u < p.n; ++u)
+            //{
+            //    string label = p.getLabel(u);
+            //    if (!count.ContainsKey(label))
+            //        count[label] = 1;
+            //    else
+            //        count[label] = count[label] + 1;
+            //}
+            //foreach (string label in count.Keys)
+            //{
+            //    if ((double)(count[label]) >= 0.8 * (double)(p.n))
+            //    {
+            //        Console.WriteLine("Too many nodes with same label");
+            //        return false;
+            //    }
+            //}
+
             bool[] vis = new bool[p.n];
             for (int i = 0; i < vis.Length; ++i)
                 vis[i] = false;
@@ -194,7 +220,7 @@ namespace PatternMining
                 }
                 step++;
             }
-            if (step > GlobalVar.radius)
+            if (step > GlobalVar.radius + 1)
             {
                 Console.WriteLine("New Pattern is to large");
                 return false;
@@ -299,7 +325,7 @@ namespace PatternMining
                     from1 = Map[from];
                     to1 = Map[to];
                 }
-                if (!Pattern1.adj[from1].Contains(to))
+                if (!Pattern1.adj[from1].Contains(to1))
                 {
                     Graph newG = Pattern1.insertEdge(from1, to1);
                     Console.WriteLine("test new pattern");
@@ -475,7 +501,10 @@ namespace PatternMining
                         from = u;
                         to = v;
                         SubPattern = Pattern2.removeEdge(u, v);
+                        //Console.WriteLine("\nSubPattern:");
+                        //SubPattern.printGraph();
                         findIsoNode(SubPattern);
+                        //Console.WriteLine("IsoNode=" + isoNode + "\n");
                         joinPatterns();
                     }
                 }
