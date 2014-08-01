@@ -93,7 +93,7 @@ namespace PatternMining
                 dif_cnt += Math.Abs(cnt1 - cnt2);
             }
 
-            if (dif_cnt > 1)
+            if (dif_cnt > 2)
                 return false;
             else
                 return true;
