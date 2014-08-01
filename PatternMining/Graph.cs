@@ -31,6 +31,8 @@ namespace PatternMining
                 edgeCnt++;
                 string[] tokens = line.Split();
                 // ID, Label, ID, Label
+                if (tokens[1].Equals(tokens[3]))
+                    Console.WriteLine("wrong");
                 int id1, id2;
                 bool hasShow1 = false;
                 bool hasShow2 = false;
@@ -90,6 +92,7 @@ namespace PatternMining
                     adj.Add(tmp);
                     deg.Add(1);
                 }
+<<<<<<< HEAD
                 if (id1 == 57)
                 {
                     Console.WriteLine();
@@ -98,6 +101,10 @@ namespace PatternMining
                 {
                     Console.WriteLine();
                 }
+=======
+                if (labels[id1].Equals(labels[id2]))
+                    Console.WriteLine(line);
+>>>>>>> origin/master
             }
 
             

@@ -91,14 +91,31 @@ namespace PatternMining
             for (int i = 0; i < potential[index].Count; ++i)
             {
                 int u = potential[index][i];
+
                 if (!Used[u])
                 {
-                    Map[index] = u;
-                    Used[u] = true;
-                    dfs(index + 1);
-                    if (Isomorphic)
-                        return;
-                    Used[u] = false;
+                    bool flag = false;
+                    for (int v = 0; v < index; ++v)
+                    {
+                        if (g2.adj[v].Contains(index))
+                        {
+                            if (!g1.adj[Map[v]].Contains(u))
+                            {
+                                flag = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (!flag)
+                    {
+                        Map[index] = u;
+                        Used[u] = true;
+                        dfs(index + 1);
+                        if (Isomorphic)
+                            return;
+                        Used[u] = false;
+                    }
                 }
             }
 

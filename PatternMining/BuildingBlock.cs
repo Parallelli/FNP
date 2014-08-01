@@ -45,7 +45,7 @@ namespace PatternMining
                 Dictionary<string, int> countNextPath = new Dictionary<string, int>();//next label supp
                 patternVids.Clear();
                 
-                if (cur.getPatternSize() >= GlobalVar.radius) continue;
+                if (cur.getPatternSize() >= GlobalVar.radius + 1) continue;
                 if (cur.getPatternSize() == 0) //empty path to extend
                 {
                     for (int i = 0; i < graph.n; i++)
@@ -80,6 +80,13 @@ namespace PatternMining
                             
                             foreach (var newLabel in newLabels)
                             {
+<<<<<<< HEAD
+=======
+                                /*if (newLabel.Equals("paper"))
+                                {
+                                    Console.WriteLine();
+                                }*/
+>>>>>>> origin/master
                                 int curCnt = 0;
                                 if (countNextPath.TryGetValue(newLabel, out curCnt))
                                 {
