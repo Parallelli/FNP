@@ -499,7 +499,7 @@ namespace PatternMining
 
             for (int i = 0; i < SubPattern.n; ++i)
             {
-                if (potential[i].Count == 0)
+                if (potential[i].Count == 0 && i != isoNode)
                     return;
             }
             for (int i = 0; i < Pattern1.n; ++i)
@@ -535,6 +535,5 @@ namespace PatternMining
 
             return new_patterns;
         }
-
     }
 }
