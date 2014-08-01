@@ -34,12 +34,12 @@ namespace PatternMining
             while (Q.Count > 0)
             {
                 PathPattern cur = Q.Dequeue();
-                var tmpList = cur.getPathPattern();
-                bool tmpSign = false;
-                if (tmpList.Count == 1 && tmpList[0] == "paper")
-                {
-                    tmpSign = true;
-                }
+                //var tmpList = cur.getPathPattern();
+                //bool tmpSign = false;
+                //if (tmpList.Count == 1 && tmpList[0] == "paper")
+                //{
+                //    tmpSign = true;
+                //}
                 Console.WriteLine("Extending the " + cnt + "-th building block\t" + cur.getPatternSize());
                 cnt++;
                 Dictionary<string, int> countNextPath = new Dictionary<string, int>();//next label supp
@@ -80,10 +80,6 @@ namespace PatternMining
                             
                             foreach (var newLabel in newLabels)
                             {
-                                if (newLabel.Equals("paper"))
-                                {
-                                    Console.WriteLine();
-                                }
                                 int curCnt = 0;
                                 if (countNextPath.TryGetValue(newLabel, out curCnt))
                                 {
@@ -95,8 +91,7 @@ namespace PatternMining
                                     countNextPath.Add(newLabel, 1);
                                     patternVids.Add(newLabel, new List<int>(pivot));
                                 }
-                            }
-                            
+                            }                        
                         }
                     }
                     catch (Exception e)

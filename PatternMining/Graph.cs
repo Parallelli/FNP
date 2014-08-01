@@ -90,7 +90,16 @@ namespace PatternMining
                     adj.Add(tmp);
                     deg.Add(1);
                 }
+                if (id1 == 57)
+                {
+                    Console.WriteLine();
+                }
+                if (id1 == 17805)
+                {
+                    Console.WriteLine();
+                }
             }
+
             
             n = idCnt;
             m = edgeCnt;
