@@ -92,19 +92,16 @@ namespace PatternMining
                     adj.Add(tmp);
                     deg.Add(1);
                 }
-<<<<<<< HEAD
-                if (id1 == 57)
-                {
-                    Console.WriteLine();
-                }
-                if (id1 == 17805)
-                {
-                    Console.WriteLine();
-                }
-=======
-                if (labels[id1].Equals(labels[id2]))
-                    Console.WriteLine(line);
->>>>>>> origin/master
+                //if (id1 == 57)
+                //{
+                //    Console.WriteLine();
+                //}
+                //if (id1 == 17805)
+                //{
+                //    Console.WriteLine();
+                //}
+                //if (labels[id1].Equals(labels[id2]))
+                  //  Console.WriteLine(line);
             }
 
             

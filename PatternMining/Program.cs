@@ -15,16 +15,13 @@ namespace PatternMining
              */
             GlobalVar.minSup = 50;
             GlobalVar.radius = 3;
-<<<<<<< HEAD
             //GlobalVar.inputFilePath = @"D:\Nodes Similarity\Neighbor Pattern\data_dblp_patternmining\dblp.txt";  //C:\scratch\github\data
             GlobalVar.inputFilePath = @"C:\scratch\github\data\dblp_new.txt";
             StreamWriter writer = new StreamWriter(@"C:\scratch\github\data\frequnetPatterns.txt");
             //StreamWriter writer = new StreamWriter(@"D:\Nodes Similarity\Neighbor Pattern\data_dblp_patternmining\frequnetPatterns.txt");  //C:\scratch\github\data
-=======
-            GlobalVar.inputFilePath = @"D:\Nodes Similarity\Neighbor Pattern\data_dblp_patternmining\dblp_new.txt";  //C:\scratch\github\data
+           // GlobalVar.inputFilePath = @"D:\Nodes Similarity\Neighbor Pattern\data_dblp_patternmining\dblp_new.txt";  //C:\scratch\github\data
 
-            StreamWriter writer = new StreamWriter(@"D:\Nodes Similarity\Neighbor Pattern\data_dblp_patternmining\frequnetPatterns.txt");  //C:\scratch\github\data
->>>>>>> origin/master
+            //StreamWriter writer = new StreamWriter(@"D:\Nodes Similarity\Neighbor Pattern\data_dblp_patternmining\frequnetPatterns.txt");  //C:\scratch\github\data
 
             Graph graph = new Graph();
             graph.buildGraph(GlobalVar.inputFilePath);
@@ -67,10 +64,10 @@ namespace PatternMining
             BuildingBlock bb = new BuildingBlock();
             List<Graph> bbGraphs = bb.getBuildingBlockGraph(graph);
 
-            /*foreach (Graph bbi in bbGraphs)
+            foreach (Graph bbi in bbGraphs)
             {
                 bbi.printGraph();
-            }*/
+            }
             Console.WriteLine("building block print done");
 
             List<List<Graph>> frequentPatterns = new List<List<Graph>>();
