@@ -67,7 +67,10 @@ namespace PatternMining
                 for (int i = 0; i < Nodes2[r].Count; ++i)
                 {
                     int v = Nodes2[r][i];
-                    for (int r1 = 1; r1 <= r; ++r1)
+                    int st = 1;
+                    if (g1.n == g2.n && g1.m == g2.m)
+                        st = r;
+                    for (int r1 = st; r1 <= r; ++r1)
                     {
                         for (int i1 = 0; i1 < Nodes1[r1].Count; ++i1)
                         {
@@ -84,8 +87,8 @@ namespace PatternMining
         {
             if (index >= g2.n)
             {
-                if (checkEdges())
-                    Isomorphic = true;
+                //if (checkEdges())
+                Isomorphic = true;
                 return;
             }
             for (int i = 0; i < potential[index].Count; ++i)
@@ -127,6 +130,44 @@ namespace PatternMining
             if (g1.n < g2.n) return false;
             if (!g1.getLabel(g1.pivot).Equals(g2.getLabel(g2.pivot)))
                 return false;
+            if (g1.n != g2.n && g1.m == g2.m)
+                return false;
+            if (g1.n == g2.n && g1.m != g2.m)
+                return false;
+
+            if (g1.n == g2.n && g1.m == g2.m)
+            {
+                Dictionary<string, int> map1 = new Dictionary<string, int>();
+                Dictionary<string, int> map2 = new Dictionary<string, int>();
+                for (int u = 0; u < g1.n; ++u)
+                {
+                    string label = g1.getLabel(u);
+                    if (!map1.ContainsKey(label))
+                        map1[label] = 1;
+                    else
+                        map1[label] = map1[label] + 1;
+                }
+                for (int u = 0; u < g2.n; ++u)
+                {
+                    string label = g2.getLabel(u);
+                    if (!map2.ContainsKey(label))
+                        map2[label] = 1;
+                    else
+                        map2[label] = map2[label] + 1;
+                }
+                foreach (string label in map1.Keys)
+                {
+                    int cnt1 = map1[label];
+                    int cnt2 = 0;
+                    if (map2.ContainsKey(label))
+                        cnt2 = map2[label];
+                    if (cnt1 != cnt2)
+                        return false;
+                }
+            }
+
+            Dictionary<string, int> count1 = new Dictionary<string, int>();
+            Dictionary<string, int> count2 = new Dictionary<string, int>();
 
             int pivot_g = g1.pivot;
             int pivot_p = g2.pivot;
@@ -153,6 +194,12 @@ namespace PatternMining
                 {
                     int u = que[front++];
                     Nodes2[step].Add(u);
+
+                    string label = g2.getLabel(u);
+                    if (count2.ContainsKey(label))
+                        count2[label] = count2[label] + 1;
+                    else
+                        count2[label] = 1;
 
                     if (step < GlobalVar.radius)
                     {
@@ -192,6 +239,11 @@ namespace PatternMining
                 {
                     int u = que[front++];
                     Nodes1[step].Add(u);
+                    string label = g1.getLabel(u);
+                    if (count1.ContainsKey(label))
+                        count1[label] = count1[label] + 1;
+                    else
+                        count1[label] = 1;
 
                     if (step < depth)
                     {
@@ -211,6 +263,16 @@ namespace PatternMining
             int cnt_g = rear;
             if (cnt_g < cnt_p)
                 return false;
+
+            foreach (string label in count2.Keys)
+            {
+                int c2 = count2[label];
+                int c1 = 0;
+                if (count1.ContainsKey(label))
+                    c1 = count1[label];
+                if (c1 < c2)
+                    return false;
+            }
 
             findPotential();
 

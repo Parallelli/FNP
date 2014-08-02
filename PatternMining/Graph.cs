@@ -31,8 +31,6 @@ namespace PatternMining
                 edgeCnt++;
                 string[] tokens = line.Split();
                 // ID, Label, ID, Label
-                if (tokens[1].Equals(tokens[3]))
-                    Console.WriteLine("wrong");
                 int id1, id2;
                 bool hasShow1 = false;
                 bool hasShow2 = false;

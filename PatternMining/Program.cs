@@ -16,11 +16,11 @@ namespace PatternMining
             GlobalVar.minSup = 50;
             GlobalVar.radius = 2;
             //GlobalVar.idMapFilePath = @"C:\scratch\github\data\idMap.txt";
-            GlobalVar.idMapFilePath = @"D:\Nodes Similarity\Neighbor Pattern\data_dblp_patternmining\idMap.txt";
+            GlobalVar.idMapFilePath = @"D:\Nodes Similarity\Neighbor Pattern\Yeast\idMap.txt";
             //GlobalVar.inputFilePath = @"C:\scratch\github\data\dblp_new.txt";
             //StreamWriter writer = new StreamWriter(@"C:\scratch\github\data\frequnetPatterns.txt");
-            GlobalVar.inputFilePath = @"D:\Nodes Similarity\Neighbor Pattern\data_dblp_patternmining\dblp_new.txt";  //C:\scratch\github\data
-            StreamWriter writer = new StreamWriter(@"D:\Nodes Similarity\Neighbor Pattern\data_dblp_patternmining\frequnetPatterns.txt");  //C:\scratch\github\data
+            GlobalVar.inputFilePath = @"D:\Nodes Similarity\Neighbor Pattern\Yeast\Yeast.fnp";  //C:\scratch\github\data
+            StreamWriter writer = new StreamWriter(@"D:\Nodes Similarity\Neighbor Pattern\Yeast\frequnetPatterns.txt");  //C:\scratch\github\data
 
             Graph graph = new Graph();
             graph.buildGraph(GlobalVar.inputFilePath);
@@ -64,7 +64,7 @@ namespace PatternMining
                 }
                 writer.Flush();
 
-                string vidFile = "D:/Nodes Similarity/Neighbor Pattern/data_dblp_patternmining/patternVid/" + (pattern_cnt - 1) + ".txt";
+                string vidFile = "D:/Nodes Similarity/Neighbor Pattern/Yeast/patternVid/" + (pattern_cnt - 1) + ".txt";
                 //string vidFile = @"C:\scratch\github\data\patternVid\" + (pattern_cnt - 1) + ".txt";
                 StreamWriter vidWriter = new StreamWriter(vidFile);
                 foreach (int v in tmp.vid)
@@ -121,7 +121,7 @@ namespace PatternMining
                         }
                         writer.Flush();
                         //string vidFile = @"C:\scratch\github\data\patternVid\" + (pattern_cnt - 1) + ".txt";
-                        string vidFile = "D:/Nodes Similarity/Neighbor Pattern/data_dblp_patternmining/patternVid/" + (pattern_cnt - 1) + ".txt";
+                        string vidFile = "D:/Nodes Similarity/Neighbor Pattern/Yeast/patternVid/" + (pattern_cnt - 1) + ".txt";
                         StreamWriter vidWriter = new StreamWriter(vidFile);
                         foreach (int v in tmp.vid)
                             vidWriter.WriteLine(v);

@@ -352,7 +352,7 @@ namespace PatternMining
                 {
                     Graph newG = Pattern1.insertEdge(from1, to1);
                     Console.WriteLine("test new pattern");
-                    newG.printGraph();
+                    //newG.printGraph();
                     if (validPattern(newG))
                     {
                         new_patterns.Add(newG);
