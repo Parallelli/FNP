@@ -139,13 +139,10 @@ namespace PatternMining
                         if (expectedLabel.Equals(mylabel))
                         {
                             vis[neighbor] = true;
-                            HashSet<string> tmp = dfs(graph, neighbor, existingLabelSeq, seqSize, curSize + 1, vis);
-                            if (seqSize == curSize + 1)
-                            {                               
-                                foreach (var item in tmp)
-                                {
-                                    res.Add(item);   
-                                }
+                            HashSet<string> tmp = dfs(graph, neighbor, existingLabelSeq, seqSize, curSize + 1, vis);                              
+                            foreach (var item in tmp)
+                            {
+                                res.Add(item);   
                             }
                             vis[neighbor] = false;
                         }
